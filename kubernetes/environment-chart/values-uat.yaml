@@ -1,0 +1,11 @@
+environment: uat
+namespace: uat-environments
+replicas: 2
+image: 0l4bode/swish-devsecops-proj:2.1
+resources:
+  requests:
+    cpu: "1"
+    memory: "1Gi"
+  limits:
+    cpu: "2"
+    memory: "2Gi"

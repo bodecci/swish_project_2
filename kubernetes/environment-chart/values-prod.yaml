@@ -1,7 +1,7 @@
 environment: prod
 namespace: prod-environments
-replicas: 3
-image: 0l4bode/swish-devsecops-proj:1.1
+replicas: 2
+image: 0l4bode/swish-devsecops-proj:2.2
 resources:
   requests:
     cpu: "2"

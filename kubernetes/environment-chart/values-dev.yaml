@@ -1,0 +1,11 @@
+environment: dev
+namespace: dev-environments
+replicas: 1
+image: 0l4bode/swish-devsecops-proj:2.2
+resources:
+  requests:
+    cpu: "500m"
+    memory: "512Mi"
+  limits:
+    cpu: "1"
+    memory: "1Gi"

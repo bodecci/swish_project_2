@@ -1,0 +1,82 @@
+name: Multi-Environment Deployment Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Select the environment to deploy to"
+        required: true
+        type: choice
+        options:
+          - dev
+          - uat
+          - prod
+      docker_image:
+        description: "Specify the Docker image to deploy"
+        required: true
+        type: choice
+        options:
+          - 0l4bode/swish-devsecops-proj:2.2
+          - 0l4bode/swish-devsecops-proj:2.1
+          - 0l4bode/swish-devsecops-proj:1.1
+      cpu_request:
+        description: "Specify the number of CPUs to request (e.g., 1, 2, 4)"
+        required: true
+        type: choice
+        options: 
+          - "1"
+          - "2"
+          - "4"
+      packages:
+        description: "Enter a comma-separated list of additional packages to install"
+        required: false
+        type: choice
+        options:
+        default: "":
+
+jobs:
+  deploy:
+    name: Deploy to Selected Environment
+    runs-on: ubuntu-20.04
+
+    steps:
+      # Step 1: Log Selected Inputs
+      - name: Log Selected Inputs
+        run: |
+          echo "Environment: ${{ github.event.inputs.environment }}"
+          echo "Docker Image: ${{ github.event.inputs.docker_image }}"
+          echo "CPU Request: ${{ github.event.inputs.cpu_request }}"
+
+      # Step 2: Deploy to the Selected Environment
+      - name: Deploy to Environment
+        run: |
+          case "${{ github.event.inputs.environment }}" in
+            dev)
+              echo "Deploying to Development Environment"
+              docker run -d \
+                --name dev-env-${{ github.run_id }} \
+                --cpus=${{ github.event.inputs.cpu_request }} \
+                --memory=512m \
+                ${{ github.event.inputs.docker_image }}
+              ;;
+            uat)
+              echo "Deploying to UAT Environment"
+              docker run -d \
+                --name uat-env-${{ github.run_id }} \
+                --cpus=${{ github.event.inputs.cpu_request }} \
+                --memory=1g \
+                ${{ github.event.inputs.docker_image }}
+              ;;
+            prod)
+              echo "Deploying to Production Environment"
+              docker run -d \
+                --name prod-env-${{ github.run_id }} \
+                --cpus=${{ github.event.inputs.cpu_request }} \
+                --memory=2g \
+                ${{ github.event.inputs.docker_image }}
+              ;;
+            *)
+              echo "Invalid environment selected!"
+              exit 1
+              ;;
+          esac

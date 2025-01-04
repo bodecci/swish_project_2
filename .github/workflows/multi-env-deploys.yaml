@@ -32,7 +32,6 @@ on:
         required: false
         type: choice
         options:
-        default: "":
 
 jobs:
   deploy:

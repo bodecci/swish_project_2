@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Values.environment }}-env"
+  namespace: development-environments
+  labels:
+    app: "{{ .Values.environment }}-env"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "{{ .Values.environment }}-env"
+  template:
+    metadata:
+      labels:
+        app: "{{ .Values.environment }}-env"
+    spec:
+      containers:
+        - name: "{{ .Values.environment }}-container"
+          image: "{{ .Values.docker_image }}"
+          resources:
+            requests:
+              cpu: "{{ .Values.cpu_request }}"
+              memory: "{{ .Values.memory_request }}"
+            limits:
+              cpu: "{{ .Values.cpu_request }}"
+              memory: "{{ .Values.memory_limit }}"
+          env:
+            - name: ADDITIONAL_PACKAGES
+              value: "{{ .Values.additional_packages }}"

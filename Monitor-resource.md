@@ -48,11 +48,11 @@ VPA adjusts CPU an memory usage: install VPA `kubectl apply -f https://github.co
 The cluster's node autoscaler adds or removes nodes to match the resource requirements of the workloads.
 here is a sample cmd to create a multiple node groups using eksctl:
 
-eksctl create nodegroup --cluster=my-cluster --name=dev-node-group \
-  --nodes=2 --nodes-min=1 --nodes-max=5 --node-labels=environment=dev --taints=environment=dev:NoSchedule
+`eksctl create nodegroup --cluster=my-cluster --name=dev-node-group \`
+  `--nodes=2 --nodes-min=1 --nodes-max=5 --node-labels=environment=dev --taints=environment=dev:NoSchedule`
 
-ksctl create nodegroup --cluster=my-cluster --name=uat-node-group \
-  --nodes=2 --nodes-min=1 --nodes-max=5 --node-labels=environment=uat --taints=environment=uat:NoSchedule
+`eksctl create nodegroup --cluster=my-cluster --name=uat-node-group \`
+  `--nodes=2 --nodes-min=1 --nodes-max=5 --node-labels=environment=uat --taints=environment=uat:NoSchedule`
 
 
 6) A good way to automatically scale resources and update configurations in Kubernetes is to implement GitOps for automation. A good tool is ArgoCD, which helps to update, scale configurations in Helm chart and/or Kubernetes manifests, based on alerts.

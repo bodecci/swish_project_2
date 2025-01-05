@@ -1,4 +1,4 @@
-## Monitor Resource Usage
+## Monitor Resource Usage and Scale Resources
 
 to monitor resource usage and accuracy
 

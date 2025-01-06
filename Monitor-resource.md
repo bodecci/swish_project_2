@@ -41,7 +41,7 @@ Downscale Resources
 To downscale resources when idle or underutilized, one would need to adjust the resource requests and replicas based on usage. To do this, HPA would be a good choice.
 
 Enabling HPA requires Metrics Server, which was recommended to be installed above.  
-I have setup a sample HPA yaml file in the prom dir.
+I have setup a sample HPA and VPA yaml file in the kubernetes/prom dir.
 
 **4)**  
 Vertical Pod Autoscaler (VPA)  

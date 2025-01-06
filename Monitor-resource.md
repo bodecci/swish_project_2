@@ -49,7 +49,7 @@ VPA adjusts CPU an memory usage: install VPA `kubectl apply -f https://github.co
 `
 
 **5)** 
-Setting up Node Autoscaling
+Node Autoscalling: To automatically scale up or down a cluster, one needs to set up Node Autoscaling
 The cluster's node autoscaler adds or removes nodes to match the resource requirements of the workloads.
 here is a sample cmd to create a multiple node groups using eksctl:
 
@@ -62,3 +62,30 @@ here is a sample cmd to create a multiple node groups using eksctl:
 
 **6)**
 A good way to automatically scale resources and update configurations in Kubernetes is to implement GitOps for automation. A good tool is ArgoCD, which helps to update, scale configurations in Helm chart and/or Kubernetes manifests, based on alerts.
+
+
+**7)**
+To architect a system where processes running inside environments above require 100-250GB of data in memory, requires careful planning and system design to ensure data is efficiently brought to aplication code, avoid memory bottleneck and cost.
+Main challenges will be:
+    - Handling Large Data sets in memory
+    - Accessing data efficiently
+    - and Cost optimization.
+
+Steps to architect for large datasets:
+    1. Object Storage: I would recommend use of an object storage (AWS S3) as the primary storage for large datasets. S3 provides high availability and durability. And you can access specific parts of the data (range queries).
+        - If the application requires real-time data sharing, one can think of a Distributed File System, that allows for concurrent access to shared data by multiple pods
+    2. Data loading and memory management: Loading the entire dataset at once (100-250GB) would be memory demanding, rather take advantage of streaming: Fetch only the necessary parts of data at runtime.
+        - Use Distributed in-memory storage: Redis or Memcache for datasets less than 100GB and tools like Apache Ignite ofr datasets 250GB+. Kafka a another tool to lok to implement for streaming.
+    3. Since the applications would be deployed in Kubernetes clusters, one would need to set apropriate memory limits and requests for pods.
+        - Ensure nodes in the cluster have enough memory to suport resource requests to pods for datasets that large. 
+        - You can take advantage of node affinity and taints/tolerations to assign high-memory workloads to specific nodes
+    4. Data Processing: Using data processing frameworks would help alleviate some of the bottlenecks that one might encounter with such large datasets. Using frameworks like Apache Spark to distribute workload across multiple nodes or pods.
+        - Batch vs Real time processing: If the dataset is not time-sensitive, process the data in batches to reduce memory pressures. If real-time processing is what is required, data streaming framework like Kafka is a good option.
+    5. Observability and Monitoring: One would want to implement monitoring and observability for memory usage for the nodes and pods. Setup alerts for memory over-utilization.
+    6. I talked about HPA and VPA for when scaling cluster above, but it is also a good option to use when looking to adjust the memory alocation.
+        - VPA: use VPA to adjust for memory allocation dynamically based on usage.
+        - HPA: If the workloads is distributed across multiple pods, using HPA to scale out based on memory utilization.
+    
+    These are teh steps I woudl take to load large datasets into application code.
+
+

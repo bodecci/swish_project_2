@@ -74,12 +74,12 @@ Main challenges will be:
 ## Steps to architect for large datasets:
 
 1. **Object Storage**: 
-    - I would recommend the use of an object storage (AWS S3) as the primary storage for large datasets. 
+I would recommend the use of an object storage (AWS S3) as the primary storage for large datasets. 
     - S3 provides high availability and durability. And you can access specific parts of the data (range queries).
     - If the application requires real-time data sharing, one can think of a Distributed File System, that allows for concurrent access to shared data by multiple pods.
 
 2. **Data loading and memory management**: 
-    - Loading the entire dataset at once (100-250GB) would be memory demanding, rather take advantage of streaming: Fetch only the necessary parts of data at runtime.
+Loading the entire dataset at once (100-250GB) would be memory demanding, rather take advantage of streaming: Fetch only the necessary parts of data at runtime.
     - Use Distributed in-memory storage: Redis or Memcache for datasets less than 100GB and tools like Apache Ignite for datasets 250GB+. Kafka is another tool to look to implement for streaming.
 
 3. **Kubernetes Resource Management**: 

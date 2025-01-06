@@ -71,21 +71,36 @@ Main challenges will be:
     - Accessing data efficiently
     - and Cost optimization.
 
-Steps to architect for large datasets:
-    1. Object Storage: I would recommend use of an object storage (AWS S3) as the primary storage for large datasets. S3 provides high availability and durability. And you can access specific parts of the data (range queries).
-        - If the application requires real-time data sharing, one can think of a Distributed File System, that allows for concurrent access to shared data by multiple pods
-    2. Data loading and memory management: Loading the entire dataset at once (100-250GB) would be memory demanding, rather take advantage of streaming: Fetch only the necessary parts of data at runtime.
-        - Use Distributed in-memory storage: Redis or Memcache for datasets less than 100GB and tools like Apache Ignite ofr datasets 250GB+. Kafka a another tool to lok to implement for streaming.
-    3. Since the applications would be deployed in Kubernetes clusters, one would need to set apropriate memory limits and requests for pods.
-        - Ensure nodes in the cluster have enough memory to suport resource requests to pods for datasets that large. 
-        - You can take advantage of node affinity and taints/tolerations to assign high-memory workloads to specific nodes
-    4. Data Processing: Using data processing frameworks would help alleviate some of the bottlenecks that one might encounter with such large datasets. Using frameworks like Apache Spark to distribute workload across multiple nodes or pods.
-        - Batch vs Real time processing: If the dataset is not time-sensitive, process the data in batches to reduce memory pressures. If real-time processing is what is required, data streaming framework like Kafka is a good option.
-    5. Observability and Monitoring: One would want to implement monitoring and observability for memory usage for the nodes and pods. Setup alerts for memory over-utilization.
-    6. I talked about HPA and VPA for when scaling cluster above, but it is also a good option to use when looking to adjust the memory alocation.
-        - VPA: use VPA to adjust for memory allocation dynamically based on usage.
-        - HPA: If the workloads is distributed across multiple pods, using HPA to scale out based on memory utilization.
-    
-    These are teh steps I woudl take to load large datasets into application code.
+## Steps to architect for large datasets:
 
+1. **Object Storage**: 
+    - I would recommend the use of an object storage (AWS S3) as the primary storage for large datasets. 
+    - S3 provides high availability and durability. And you can access specific parts of the data (range queries).
+    - If the application requires real-time data sharing, one can think of a Distributed File System, that allows for concurrent access to shared data by multiple pods.
 
+2. **Data loading and memory management**: 
+    - Loading the entire dataset at once (100-250GB) would be memory demanding, rather take advantage of streaming: Fetch only the necessary parts of data at runtime.
+    - Use Distributed in-memory storage: Redis or Memcache for datasets less than 100GB and tools like Apache Ignite for datasets 250GB+. Kafka is another tool to look to implement for streaming.
+
+3. **Kubernetes Resource Management**: 
+    - Since the applications would be deployed in Kubernetes clusters, one would need to set appropriate memory limits and requests for pods.
+    - Ensure nodes in the cluster have enough memory to support resource requests to pods for datasets that large. 
+    - You can take advantage of node affinity and taints/tolerations to assign high-memory workloads to specific nodes.
+
+4. **Data Processing**: 
+    - Using data processing frameworks would help alleviate some of the bottlenecks that one might encounter with such large datasets. 
+    - Using frameworks like Apache Spark to distribute workload across multiple nodes or pods.
+    - Batch vs Real-time processing: If the dataset is not time-sensitive, process the data in batches to reduce memory pressures. If real-time processing is what is required, data streaming framework like Kafka is a good option.
+
+5. **Observability and Monitoring**: 
+    - One would want to implement monitoring and observability for memory usage for the nodes and pods.
+    - Setup alerts for memory over-utilization.
+
+6. **Autoscaling with HPA and VPA**: 
+    - I talked about HPA and VPA for when scaling clusters above, but it is also a good option to use when looking to adjust the memory allocation.
+        - **VPA**: Use VPA to adjust for memory allocation dynamically based on usage.
+        - **HPA**: If the workloads are distributed across multiple pods, use HPA to scale out based on memory utilization.
+
+---
+
+These are the steps I would take to load large datasets into application code.

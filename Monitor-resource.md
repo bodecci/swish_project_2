@@ -83,12 +83,12 @@ Loading the entire dataset at once (100-250GB) would be memory demanding, rather
     - Use Distributed in-memory storage: Redis or Memcache for datasets less than 100GB and tools like Apache Ignite for datasets 250GB+. Kafka is another tool to look to implement for streaming.
 
 3. **Kubernetes Resource Management**: 
-    - Since the applications would be deployed in Kubernetes clusters, one would need to set appropriate memory limits and requests for pods.
+Since the applications would be deployed in Kubernetes clusters, one would need to set appropriate memory limits and requests for pods.
     - Ensure nodes in the cluster have enough memory to support resource requests to pods for datasets that large. 
     - You can take advantage of node affinity and taints/tolerations to assign high-memory workloads to specific nodes.
 
 4. **Data Processing**: 
-    - Using data processing frameworks would help alleviate some of the bottlenecks that one might encounter with such large datasets. 
+Using data processing frameworks would help alleviate some of the bottlenecks that one might encounter with such large datasets. 
     - Using frameworks like Apache Spark to distribute workload across multiple nodes or pods.
     - Batch vs Real-time processing: If the dataset is not time-sensitive, process the data in batches to reduce memory pressures. If real-time processing is what is required, data streaming framework like Kafka is a good option.
 
@@ -97,7 +97,7 @@ Loading the entire dataset at once (100-250GB) would be memory demanding, rather
     - Setup alerts for memory over-utilization.
 
 6. **Autoscaling with HPA and VPA**: 
-    - I talked about HPA and VPA for when scaling clusters above, but it is also a good option to use when looking to adjust the memory allocation.
+I talked about HPA and VPA for when scaling clusters above, but it is also a good option to use when looking to adjust the memory allocation.
         - **VPA**: Use VPA to adjust for memory allocation dynamically based on usage.
         - **HPA**: If the workloads are distributed across multiple pods, use HPA to scale out based on memory utilization.
 

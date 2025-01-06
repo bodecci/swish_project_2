@@ -63,6 +63,7 @@ Here is a sample cmd to create multiple node groups using eksctl:
 `eksctl create nodegroup --cluster=my-cluster --name=uat-node-group \`
   `--nodes=2 --nodes-min=1 --nodes-max=5 --node-labels=environment=uat --taints=environment=uat:NoSchedule`
 
+You can take advantage of node affinity and taints/tolerations to assign high-memory workloads to specific nodes, to easily scale-up to handle request for multiple instances.
 
 
 **6)**  
